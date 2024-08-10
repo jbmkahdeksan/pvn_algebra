@@ -5,16 +5,16 @@ This project aims to implement these ideas into a Python module which can be uti
 A simple neutrosophic number is a number of the form "X = a + bI".
 Where "a" is a real or complex coefficient and "b" is a real or complex number binded to indeterminacy (I).
     
-Operations for Simple Neutrosophic Number stated in Pura Vida Neutrosophic Algebra are:
+ Having two simple neutrosophic numbers `X = a + bI` and `Y = c + dI`. 
+ Operations for Simple Neutrosophic Number stated in Pura Vida Neutrosophic Algebra are:
 - Addition using Max-Plus algebra.
-    Having two simple neutrosophic numbers X = a + bI and Y = c + dI.
-    > Their addition is X @ Y = max(a, c) + max(b, d)I.
+    - `X @ Y = max(a, c) + max(b, d)I`
 - Addition using Min-Plus (Tropical) algebra.
     Having two simple neutrosophic numbers X = a + bI and Y = c + dI. 
-    > Their addition is X + Y = min(a, c) + min(b, d)I.
+    - `X + Y = min(a, c) + min(b, d)I`
 - Multiplication.
     Having two simple neutrosophic numbers X = a + bI and Y = c + dI.
-    > Their multiplication is X * Y = (a + c) + (b + d)I.
+    - `X * Y = (a + c) + (b + d)I`
 
 ### Limitations
 Current features missing:
