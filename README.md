@@ -8,18 +8,17 @@ Where "a" is a real or complex coefficient and "b" is a real or complex number b
  Having two simple neutrosophic numbers `X = a + bI` and `Y = c + dI`. 
  Operations for Simple Neutrosophic Number stated in Pura Vida Neutrosophic Algebra are:
 - Addition using Max-Plus algebra.
-    - `X @ Y = max(a, c) + max(b, d)I`
+    - `add_max(X, Y) = max(a, c) + max(b, d)I`
 - Addition using Min-Plus (Tropical) algebra.
     Having two simple neutrosophic numbers X = a + bI and Y = c + dI. 
-    - `X + Y = min(a, c) + min(b, d)I`
+    - `add_min(X, Y) = min(a, c) + min(b, d)I`
 - Multiplication.
     Having two simple neutrosophic numbers X = a + bI and Y = c + dI.
-    - `X * Y = (a + c) + (b + d)I`
+    - `multiply(X, Y) = (a + c) + (b + d)I`
 
 ### Limitations
 Current features missing:
-* Support for complex numbers
-* Support for matrix operations
+* Support for complex numbers as coefficients
 
 ### How to use
 Adding this project to PyPI is intended for a better adoption
