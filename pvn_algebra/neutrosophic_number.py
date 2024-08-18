@@ -4,7 +4,7 @@ and its operations based on the paper: Pura Vida Neutrosophic Algebra.
 """
 
 from dataclasses import dataclass
-
+import re
 
 @dataclass
 class Indeterminacy:
@@ -21,28 +21,46 @@ class NeutrosophicNumber:
     Having two neutrosophic numbers `X = a + bI` and `Y = c + dI`
     Operations for them stated in Pura Vida Neutrosophic Algebra are:
     - Addition using Max-Plus algebra.
-        > X + Y = max(a, c) + max(b, d)I.
+        > add_max(X, Y) = max(a, c) + max(b, d)I.
     - Addition using Min-Plus (Tropical) algebra.
-        > X - Y = min(a, c) + min(b, d)I.
+        > add_min(X, Y) = min(a, c) + min(b, d)I.
     - Multiplication.
-        > X * Y = (a + c) + (b + d)I.
+        > multipy(X, Y) = (a + c) + (b + d)I.
     """
 
-    def __init__(self, a: float = 0, indet: float = 0):
-        self.coefficient = a
-        self.indet = Indeterminacy(indet)
+    def __init__(self, *args):
+        if isinstance(args[0], str):
+            real_part = 0
+            imaginary_part = 0
 
-    def __add__(self, other: 'NeutrosophicNumber') -> 'NeutrosophicNumber':
-        return NeutrosophicNumber(
-            self.coefficient + other.coefficient,
-            self.indet.coefficient + other.indet.coefficient
-        )
+            real_pattern = r'[-+]?\d*\.?\d+(?!I)'
+            imaginary_pattern = r'[-+]?\s?\d*\.?\d*I'
 
-    def __sub__(self, other: 'NeutrosophicNumber') -> 'NeutrosophicNumber':
-        return NeutrosophicNumber(
-            self.coefficient - other.coefficient,
-            self.indet.coefficient - other.indet.coefficient
-        )
+            real_terms = re.findall(real_pattern, args[0])
+            real_part = sum(float(term) for term in real_terms)
+
+            imaginary_terms = re.findall(imaginary_pattern, args[0])
+            for term in imaginary_terms:
+                if term == '+I' or term == 'I':
+                    imaginary_part += 1
+                elif term == '-I':
+                    imaginary_part -= 1
+                elif "-" in term:
+                    imaginary_part -= float(term.strip('-I'))
+                else:
+                    imaginary_part += float(term.strip('+I'))
+            self.coefficient = real_part
+            self.indet = Indeterminacy(imaginary_part)
+
+        elif len(args) == 2:
+            if all([val for val in args if isinstance(val, int)]):
+                self.coefficient = int(args[0])
+                self.indet = Indeterminacy(int(args[1]))
+            elif all([val for val in args if isinstance(val, float)]):
+                self.coefficient = float(args[0])
+                self.indet = Indeterminacy(float(args[1]))
+        else:
+            print("ConstructorError: NeutrosophicNumber() does not support the provided arguments")
 
     def add_max(self, other: "NeutrosophicNumber") -> "NeutrosophicNumber":
         """Addition using Max-Plus algebra."""
@@ -67,7 +85,13 @@ class NeutrosophicNumber:
 
     def __repr__(self):
         sign = "+" if self.indet.coefficient >= 0 else "-"
-        return f"({self.coefficient}{sign}{self.indet.coefficient.__abs__()}I)"
+        coefficient = self.coefficient
+        indeterminacy = self.indet.coefficient
+        if not coefficient and not indeterminacy:
+            return "(0)"
+        elif abs(indeterminacy) == 1:
+            return f"({coefficient}{sign}I)"
+        return f"({coefficient}{sign}{abs(indeterminacy)}I)"
 
 
 def add_min(number1: "NeutrosophicNumber", number2: "NeutrosophicNumber"):
@@ -80,19 +104,3 @@ def add_max(number1: "NeutrosophicNumber", number2: "NeutrosophicNumber"):
 
 def multiply(number1: "NeutrosophicNumber", number2: "NeutrosophicNumber"):
     return number1.multiply(number2)
-
-
-x = NeutrosophicNumber(5, 6)
-y = NeutrosophicNumber(-1, 14)
-
-print(f"x = {x}")
-print(f"y = {y}")
-
-print(f"number.add_max(x, y) = {x.add_max(y)}")
-print(f"number.add_min(x, y) = {x.add_min(y)}")
-print(f"number.multiply(x, y) = {x.multiply(y)}")
-
-
-print(NeutrosophicNumber(1))
-print(NeutrosophicNumber(indet=9))
-print(NeutrosophicNumber())

@@ -1,2 +1,3 @@
-from .number import NeutrosophicNumber, add_min, add_max, multiply
-from .matrix import add_min, add_max, multiply
+from .neutrosophic_number import NeutrosophicNumber
+from . import neutrosophic_number as number
+from . import neutrosophic_matrix as matrix
